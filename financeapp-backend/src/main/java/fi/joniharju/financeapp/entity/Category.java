@@ -26,8 +26,7 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Transaction> transactions;
 
-    public Category(Long id, String name, AppUser user, List<Transaction> transactions) {
-        this.id = id;
+    public Category(String name, AppUser user, List<Transaction> transactions) {
         this.name = name;
         this.user = user;
         this.transactions = transactions;

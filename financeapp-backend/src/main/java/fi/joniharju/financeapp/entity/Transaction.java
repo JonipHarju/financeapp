@@ -30,10 +30,10 @@ public class Transaction {
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
-    public Transaction(Long id, BigDecimal amount, LocalDate date, String description, TransactionType type,
+    public Transaction(BigDecimal amount, LocalDate date, String description, TransactionType type,
             AppUser user,
             Category category) {
-        this.id = id;
+
         this.amount = amount;
         this.date = date;
         this.description = description;
