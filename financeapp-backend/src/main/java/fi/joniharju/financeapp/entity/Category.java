@@ -21,12 +21,12 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private AppUser user;
 
     @OneToMany(mappedBy = "category")
     private List<Transaction> transactions;
 
-    public Category(Long id, String name, User user, List<Transaction> transactions) {
+    public Category(Long id, String name, AppUser user, List<Transaction> transactions) {
         this.id = id;
         this.name = name;
         this.user = user;
@@ -52,11 +52,11 @@ public class Category {
         this.name = name;
     }
 
-    public User getUser() {
+    public AppUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(AppUser user) {
         this.user = user;
     }
 

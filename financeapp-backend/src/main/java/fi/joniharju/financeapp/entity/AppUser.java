@@ -4,7 +4,6 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,8 +12,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 // rename user table to app_user because user is a reserved word in PostgreSQL
-@Table(name = "app_user")
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,14 +29,14 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
-    public User(Long id, String username, String password, String email) {
+    public AppUser(Long id, String username, String password, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
     }
 
-    public User() {
+    public AppUser() {
     }
 
     // Getters and setters

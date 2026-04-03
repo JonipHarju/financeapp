@@ -25,12 +25,13 @@ public class Transaction {
     private TransactionType type;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private AppUser user;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
-    public Transaction(Long id, BigDecimal amount, LocalDate date, String description, TransactionType type, User user,
+    public Transaction(Long id, BigDecimal amount, LocalDate date, String description, TransactionType type,
+            AppUser user,
             Category category) {
         this.id = id;
         this.amount = amount;
@@ -84,11 +85,11 @@ public class Transaction {
         this.type = type;
     }
 
-    public User getUser() {
+    public AppUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(AppUser user) {
         this.user = user;
     }
 

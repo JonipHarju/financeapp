@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class UserTest {
+public class AppUserTest {
 
     @Test
     void UserCreation() {
-        User testUser = new User(1L, "Joni Harju", "test123", "joni@email.com");
+        AppUser testUser = new AppUser(1L, "Joni Harju", "test123", "joni@email.com");
         assertEquals(1L, testUser.getId());
         assertEquals("Joni Harju", testUser.getUsername());
         assertEquals("test123", testUser.getPassword());
@@ -18,7 +18,7 @@ public class UserTest {
 
     @Test
     void UserEdit() {
-        User testUser = new User(1L, "Joni Harju", "test123", "joni@email.com");
+        AppUser testUser = new AppUser(1L, "Joni Harju", "test123", "joni@email.com");
         testUser.setId(2L);
         assertEquals(2L, testUser.getId());
         testUser.setUsername("New Name");

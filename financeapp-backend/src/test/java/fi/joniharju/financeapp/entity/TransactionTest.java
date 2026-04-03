@@ -8,7 +8,7 @@ public class TransactionTest {
 
     @Test
     void TransactionCreation() {
-        User user = new User(1L, "Joni Harju", "test123", "joni@email.com");
+        AppUser user = new AppUser(1L, "Joni Harju", "test123", "joni@email.com");
         Category category = new Category(1L, "Groceries", user, null);
         Transaction transaction = new Transaction(1L, new java.math.BigDecimal("10.50"), java.time.LocalDate.now(),
                 "Wolt", TransactionType.EXPENSE, user, category);
@@ -22,7 +22,7 @@ public class TransactionTest {
 
     @Test
     void TransactionEdit() {
-        User user = new User(1L, "Joni Harju", "test123", "joni@email.com");
+        AppUser user = new AppUser(1L, "Joni Harju", "test123", "joni@email.com");
         Category category = new Category(1L, "Groceries", user, null);
         Transaction transaction = new Transaction(1L, new java.math.BigDecimal("10.50"), java.time.LocalDate.now(),
                 "Lunch", TransactionType.EXPENSE, user, category);

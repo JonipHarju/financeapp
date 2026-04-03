@@ -8,7 +8,7 @@ public class CategoryTest {
 
     @Test
     void CategoryCreation() {
-        User user = new User(1L, "Joni Harju", "test123", "joni@email.com");
+        AppUser user = new AppUser(1L, "Joni Harju", "test123", "joni@email.com");
         Category category = new Category(1L, "Groceries", user, null);
         assertEquals(1L, category.getId());
         assertEquals("Groceries", category.getName());
@@ -17,7 +17,7 @@ public class CategoryTest {
 
     @Test
     void CategoryEdit() {
-        User user = new User(1L, "Joni Harju", "test123", "joni@email.com");
+        AppUser user = new AppUser(1L, "Joni Harju", "test123", "joni@email.com");
         Category category = new Category(1L, "Groceries", user, null);
         category.setName("Utilities");
         assertEquals("Utilities", category.getName());
