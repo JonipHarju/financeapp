@@ -29,8 +29,7 @@ public class AppUser {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
-    public AppUser(Long id, String username, String password, String email) {
-        this.id = id;
+    public AppUser(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
