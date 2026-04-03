@@ -8,17 +8,17 @@ public class AppUserTest {
 
     @Test
     void UserCreation() {
-        AppUser testUser = new AppUser(1L, "Joni Harju", "test123", "joni@email.com");
-        assertEquals(1L, testUser.getId());
-        assertEquals("Joni Harju", testUser.getUsername());
-        assertEquals("test123", testUser.getPassword());
-        assertEquals("joni@email.com", testUser.getEmail());
+        AppUser user = new AppUser("Joni Harju", "test123", "joni@email.com");
+        // id is not set until persisted
+        assertEquals("Joni Harju", user.getUsername());
+        assertEquals("test123", user.getPassword());
+        assertEquals("joni@email.com", user.getEmail());
 
     }
 
     @Test
     void UserEdit() {
-        AppUser testUser = new AppUser(1L, "Joni Harju", "test123", "joni@email.com");
+        AppUser testUser = new AppUser("Joni Harju", "test123", "joni@email.com");
         testUser.setId(2L);
         assertEquals(2L, testUser.getId());
         testUser.setUsername("New Name");
