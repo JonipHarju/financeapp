@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import fi.joniharju.financeapp.entity.AppUser;
 
-public interface UserRepository extends CrudRepository<AppUser, Long> {
+public interface AppUserRepository extends CrudRepository<AppUser, Long> {
 
 }
