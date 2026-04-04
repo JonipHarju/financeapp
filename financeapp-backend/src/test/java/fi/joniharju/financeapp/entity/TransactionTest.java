@@ -15,7 +15,6 @@ public class TransactionTest {
         Category category = new Category("Groceries", user, null);
         Transaction transaction = new Transaction(new BigDecimal("10.00"), LocalDate.now(), "Test",
                 TransactionType.EXPENSE, user, category);
-        // id is not set until persisted
         assertEquals(new BigDecimal("10.00"), transaction.getAmount());
         assertEquals("Test", transaction.getDescription());
         assertEquals(TransactionType.EXPENSE, transaction.getType());
