@@ -236,6 +236,13 @@ The plan is to implement the project by one phase at a time and perform incremen
 
 ### 4. DTO ?
 
+- Create Data Transfer Objects for:
+  - CategoryRequest
+  - CategoryResponse
+  - TransactionRequest
+  - TransactionResponse
+- Create a DTO mapper function that maps our DB entities into response objects
+
 ### 5. Services
 
 - TransactionService
