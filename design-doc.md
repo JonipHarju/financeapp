@@ -234,7 +234,7 @@ The plan is to implement the project by one phase at a time and perform incremen
 - Create TransactionRepository
 - Add and test basic CRUD queries.
 
-### 4. DTO ?
+### 4. DTO
 
 - Create Data Transfer Objects for:
   - CategoryRequest
