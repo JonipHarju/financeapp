@@ -3,6 +3,7 @@ package fi.joniharju.financeapp.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,6 +20,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private BigDecimal amount;
+    @Column(nullable = false)
     private LocalDate date;
     private String description;
     @Enumerated(EnumType.STRING)
