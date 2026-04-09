@@ -19,11 +19,13 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(nullable = false)
     private BigDecimal amount;
     @Column(nullable = false)
     private LocalDate date;
     private String description;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TransactionType type;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
