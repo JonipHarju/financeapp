@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-// rename user table to app_user because user is a reserved word in PostgreSQL
 public class AppUser {
 
     @Id
