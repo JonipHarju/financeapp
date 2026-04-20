@@ -260,6 +260,7 @@ The plan is to implement the project by one phase at a time and perform incremen
 - CategoryService
   - create Category
   - get categories
+  - update category
   - delete category
 
 ### 6. Controller Layer
