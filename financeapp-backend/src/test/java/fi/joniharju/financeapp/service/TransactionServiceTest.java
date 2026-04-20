@@ -16,6 +16,7 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import fi.joniharju.financeapp.PasswordEncoderConfig;
 import fi.joniharju.financeapp.dto.TransactionRequest;
 import fi.joniharju.financeapp.dto.TransactionResponse;
 import fi.joniharju.financeapp.entity.AppUser;
@@ -28,7 +29,7 @@ import fi.joniharju.financeapp.repository.TransactionRepository;
 
 @DataJpaTest
 @ActiveProfiles("test")
-@Import(TransactionService.class)
+@Import({ TransactionService.class, PasswordEncoderConfig.class })
 public class TransactionServiceTest {
 
     @Autowired

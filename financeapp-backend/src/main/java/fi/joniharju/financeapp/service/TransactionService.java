@@ -30,11 +30,14 @@ public class TransactionService {
     }
 
     public TransactionResponse createTransaction(TransactionRequest req, AppUser user) {
+        Category category = null;
+        if (req.getCategoryId() != null) {
+            category = categoryRepository.findById(req.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+        }
         Transaction transaction = new Transaction(req.getAmount(), req.getDate(), req.getDescription(), req.getType(),
-                user, null);
-        Transaction savedTransaction = transactionRepository.save(transaction);
-        return DtoMapper.toTransactionResponse(savedTransaction);
-
+                user, category);
+        return DtoMapper.toTransactionResponse(transactionRepository.save(transaction));
     }
 
     public TransactionResponse updateTransaction(Long id, TransactionRequest req) {

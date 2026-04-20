@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,12 +27,12 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getCategories(AppUser user) {
+    public ResponseEntity<List<CategoryResponse>> getCategories(@AuthenticationPrincipal AppUser user) {
         return ResponseEntity.ok(categoryService.getCategories(user));
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest req, AppUser user) {
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest req, @AuthenticationPrincipal AppUser user) {
         return ResponseEntity.ok(categoryService.createCategory(req, user));
     }
 

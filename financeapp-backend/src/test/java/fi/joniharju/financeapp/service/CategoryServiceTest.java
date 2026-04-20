@@ -13,6 +13,7 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import fi.joniharju.financeapp.PasswordEncoderConfig;
 import fi.joniharju.financeapp.dto.CategoryRequest;
 import fi.joniharju.financeapp.dto.CategoryResponse;
 import fi.joniharju.financeapp.entity.AppUser;
@@ -22,7 +23,7 @@ import fi.joniharju.financeapp.repository.CategoryRepository;
 
 @DataJpaTest
 @ActiveProfiles("test")
-@Import(CategoryService.class)
+@Import({ CategoryService.class, PasswordEncoderConfig.class })
 public class CategoryServiceTest {
 
     @Autowired

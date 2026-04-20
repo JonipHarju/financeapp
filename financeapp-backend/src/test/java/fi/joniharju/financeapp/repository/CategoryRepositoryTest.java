@@ -11,13 +11,16 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import fi.joniharju.financeapp.PasswordEncoderConfig;
 import fi.joniharju.financeapp.entity.AppUser;
 import fi.joniharju.financeapp.entity.Category;
 
 @DataJpaTest
 @ActiveProfiles("test")
+@Import(PasswordEncoderConfig.class)
 public class CategoryRepositoryTest {
 
     @Autowired
