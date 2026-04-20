@@ -4,23 +4,20 @@
 
 The purpose of the application is to be a simple tool for tracking personal finances. Users can record income and expenses, categorize transactions, and view summaries of their financial activity. Users can also set a budget, and based on their expenses, the application will count monthly, weekly, and daily budgets for them.
 
-The system is a web application that has a RESTful backend and runs a separate React frontend.
+The system is a web application built with Spring Boot and Thymeleaf, served as a single application.
 
 ## Tech Stack
 
 - Backend: Spring Boot
-- Frontend: React with Vite
+- Frontend: Thymeleaf (server-side templates)
 - Database: PostgreSQL
 - Authentication: Spring Security
 - Deployment: On a Hetzner VPS that is hosting a Coolify instance
-- Containerization: Docker
 
 ## Architecture
 
-- Frontend (React)
-  - The user interacts with the React frontend that communicates with the backend
 - Backend (Java, Spring Boot)
-  - Backend will handle all business logic, authentication and data
+  - Handles all business logic, authentication, data, and serves the UI via Thymeleaf templates
 - Database (PostgreSQL)
   - Data is stored into a PostgreSQL database
 
@@ -303,26 +300,16 @@ The plan is to implement the project by one phase at a time and perform incremen
 
 ### 10. Frontend
 
-- Init React Project (Vite)
-- TODO ....
+- Implement Thymeleaf templates for all views
+  - Login and register pages
+  - Transaction list (main page)
+  - Transaction create/edit form
+  - Categories page
 
 ### 11. Deployment
 
-- Dockerize the application in the following way
-
-```plaintext
-/root
-├── backend/
-│   └── Dockerfile
-├── frontend/
-│   └── Dockerfile
-└── docker-compose.yml
-```
-
-- Set up a PostgreSQL database on the server
-- Deploy the application
-- Configure env variables
-- Test that everything is running.
+- Deploy via Coolify on a Hetzner VPS
+- PostgreSQL database provisioned directly in Coolify (for prod and tests)
 - Configure domain and DNS settings.
 
 ## Other possible things to include
