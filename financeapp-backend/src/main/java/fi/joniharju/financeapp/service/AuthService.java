@@ -18,6 +18,12 @@ public class AuthService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public void register(RegisterRequest request) {
+        if (appUserRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already taken");
+        }
+        if (appUserRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already in use");
+        }
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         AppUser user = new AppUser(request.getUsername(), hashedPassword, request.getEmail());
         appUserRepository.save(user);

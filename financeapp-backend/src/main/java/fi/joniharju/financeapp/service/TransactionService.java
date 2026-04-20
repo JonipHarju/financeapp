@@ -40,9 +40,12 @@ public class TransactionService {
         return DtoMapper.toTransactionResponse(transactionRepository.save(transaction));
     }
 
-    public TransactionResponse updateTransaction(Long id, TransactionRequest req) {
+    public TransactionResponse updateTransaction(Long id, TransactionRequest req, AppUser user) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
+        if (!transaction.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Access denied");
+        }
 
         transaction.setAmount(req.getAmount());
         transaction.setDate(req.getDate());
@@ -60,7 +63,12 @@ public class TransactionService {
         return DtoMapper.toTransactionResponse(transactionRepository.save(transaction));
     }
 
-    public void deleteTransaction(Long id) {
+    public void deleteTransaction(Long id, AppUser user) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+        if (!transaction.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Access denied");
+        }
         transactionRepository.deleteById(id);
     }
 

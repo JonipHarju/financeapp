@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -34,7 +35,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionRequest req,
+    public ResponseEntity<TransactionResponse> createTransaction(@Valid @RequestBody TransactionRequest req,
             @AuthenticationPrincipal AppUser user) {
 
         return ResponseEntity.ok(transactionService.createTransaction(req, user));
@@ -42,14 +43,14 @@ public class TransactionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TransactionResponse> updateTransaction(@PathVariable Long id,
-            @RequestBody TransactionRequest req) {
+            @Valid @RequestBody TransactionRequest req, @AuthenticationPrincipal AppUser user) {
 
-        return ResponseEntity.ok(transactionService.updateTransaction(id, req));
+        return ResponseEntity.ok(transactionService.updateTransaction(id, req, user));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
-        transactionService.deleteTransaction(id);
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Long id, @AuthenticationPrincipal AppUser user) {
+        transactionService.deleteTransaction(id, user);
         return ResponseEntity.noContent().build();
     }
 

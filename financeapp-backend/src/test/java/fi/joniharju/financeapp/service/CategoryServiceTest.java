@@ -65,7 +65,7 @@ public class CategoryServiceTest {
         Category savedCategory = categoryRepository.save(new Category("Food", testUser, null));
         CategoryRequest request = new CategoryRequest("Groceries");
 
-        CategoryResponse response = categoryService.updateCategory(savedCategory.getId(), request);
+        CategoryResponse response = categoryService.updateCategory(savedCategory.getId(), request, testUser);
 
         assertEquals("Groceries", response.getName());
         assertEquals(savedCategory.getId(), response.getId());
@@ -76,7 +76,7 @@ public class CategoryServiceTest {
         AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
         Category savedCategory = categoryRepository.save(new Category("Food", testUser, null));
 
-        categoryService.deleteCategory(savedCategory.getId());
+        categoryService.deleteCategory(savedCategory.getId(), testUser);
 
         Optional<Category> deletedCategory = categoryRepository.findById(savedCategory.getId());
         assertFalse(deletedCategory.isPresent());

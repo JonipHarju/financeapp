@@ -4,13 +4,23 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import fi.joniharju.financeapp.entity.TransactionType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class TransactionRequest {
 
+    @NotNull
+    @Positive
     private BigDecimal amount;
+
+    @NotNull
     private LocalDate date;
+
     private String description;
+
+    @NotNull
     private TransactionType type;
+
     private Long categoryId;
 
     public TransactionRequest() {

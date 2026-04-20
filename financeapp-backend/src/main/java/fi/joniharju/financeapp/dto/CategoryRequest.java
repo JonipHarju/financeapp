@@ -1,7 +1,10 @@
 package fi.joniharju.financeapp.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CategoryRequest {
 
+    @NotBlank
     private String name;
 
     public CategoryRequest() {

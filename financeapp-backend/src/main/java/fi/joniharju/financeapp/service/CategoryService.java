@@ -30,14 +30,22 @@ public class CategoryService {
         return DtoMapper.toCategoryResponse(savedCategory);
     }
 
-    public CategoryResponse updateCategory(Long id, CategoryRequest req) {
+    public CategoryResponse updateCategory(Long id, CategoryRequest req, AppUser user) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
+        if (!category.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Access denied");
+        }
         category.setName(req.getName());
         return DtoMapper.toCategoryResponse(categoryRepository.save(category));
     }
 
-    public void deleteCategory(Long id) {
+    public void deleteCategory(Long id, AppUser user) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        if (!category.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Access denied");
+        }
         categoryRepository.deleteById(id);
     }
 }

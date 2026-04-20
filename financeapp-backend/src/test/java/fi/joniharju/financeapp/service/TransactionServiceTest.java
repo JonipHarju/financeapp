@@ -81,7 +81,7 @@ public class TransactionServiceTest {
         TransactionRequest request = new TransactionRequest(new BigDecimal("25.00"), LocalDate.now(),
                 "Updated description", TransactionType.INCOME, null);
 
-        TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request);
+        TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request, testUser);
 
         assertEquals("Updated description", response.getDescription());
         assertEquals(TransactionType.INCOME, response.getType());
@@ -97,7 +97,7 @@ public class TransactionServiceTest {
         TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
                 TransactionType.EXPENSE, savedCategory.getId());
 
-        TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request);
+        TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request, testUser);
 
         assertEquals("Food", response.getCategoryName());
     }
@@ -111,7 +111,7 @@ public class TransactionServiceTest {
         TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
                 TransactionType.EXPENSE, null);
 
-        TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request);
+        TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request, testUser);
 
         assertNull(response.getCategoryName());
     }
@@ -122,7 +122,7 @@ public class TransactionServiceTest {
         Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
                 LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
 
-        transactionService.deleteTransaction(savedTransaction.getId());
+        transactionService.deleteTransaction(savedTransaction.getId(), testUser);
 
         Optional<Transaction> deletedTransaction = transactionRepository.findById(savedTransaction.getId());
         assertFalse(deletedTransaction.isPresent());

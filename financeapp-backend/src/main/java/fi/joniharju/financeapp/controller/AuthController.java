@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 import fi.joniharju.financeapp.dto.RegisterRequest;
 import fi.joniharju.financeapp.service.AuthService;
@@ -21,7 +22,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody RegisterRequest req) {
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest req) {
         authService.register(req);
         return ResponseEntity.ok().build();
     }

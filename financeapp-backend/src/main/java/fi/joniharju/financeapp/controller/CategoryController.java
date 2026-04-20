@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,19 +33,19 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest req, @AuthenticationPrincipal AppUser user) {
+    public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest req, @AuthenticationPrincipal AppUser user) {
         return ResponseEntity.ok(categoryService.createCategory(req, user));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id,
-            @RequestBody CategoryRequest req) {
-        return ResponseEntity.ok(categoryService.updateCategory(id, req));
+            @Valid @RequestBody CategoryRequest req, @AuthenticationPrincipal AppUser user) {
+        return ResponseEntity.ok(categoryService.updateCategory(id, req, user));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id, @AuthenticationPrincipal AppUser user) {
+        categoryService.deleteCategory(id, user);
         return ResponseEntity.noContent().build();
     }
 
