@@ -51,6 +51,12 @@ The system is a web application that has a RESTful backend and runs a separate R
 - View Transactions by category
 - View transactions by amount
 
+### Display users balance
+
+- When user creates their account they are asked for a balance
+  - This is counted as a transaction
+- This balance number is then added and removed from when the user adds transactions
+
 ## Extended features (after core features are done)
 
 - Recurring transactions (rent, mortgage, car payments etc.)
