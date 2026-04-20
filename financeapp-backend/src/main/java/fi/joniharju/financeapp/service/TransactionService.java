@@ -3,6 +3,7 @@ package fi.joniharju.financeapp.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fi.joniharju.financeapp.dto.TransactionRequest;
@@ -17,13 +18,10 @@ import fi.joniharju.financeapp.repository.TransactionRepository;
 @Service
 public class TransactionService {
 
-    private final CategoryRepository categoryRepository;
-    private final TransactionRepository transactionRepository;
-
-    public TransactionService(TransactionRepository transactionRepository, CategoryRepository categoryRepository) {
-        this.transactionRepository = transactionRepository;
-        this.categoryRepository = categoryRepository;
-    }
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public List<TransactionResponse> getTransactions(AppUser user) {
         return transactionRepository.findAllByUser(user).stream().map(DtoMapper::toTransactionResponse)

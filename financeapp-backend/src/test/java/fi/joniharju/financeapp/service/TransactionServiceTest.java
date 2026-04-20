@@ -10,10 +10,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import fi.joniharju.financeapp.dto.TransactionRequest;
@@ -28,6 +28,7 @@ import fi.joniharju.financeapp.repository.TransactionRepository;
 
 @DataJpaTest
 @ActiveProfiles("test")
+@Import(TransactionService.class)
 public class TransactionServiceTest {
 
     @Autowired
@@ -39,18 +40,16 @@ public class TransactionServiceTest {
     @Autowired
     private AppUserRepository appUserRepository;
 
+    @Autowired
     private TransactionService transactionService;
-
-    @BeforeEach
-    void setUp() {
-        transactionService = new TransactionService(transactionRepository, categoryRepository);
-    }
 
     @Test
     void getTransactions() {
         AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        transactionRepository.save(new Transaction(new BigDecimal("10.00"), LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
-        transactionRepository.save(new Transaction(new BigDecimal("500.00"), LocalDate.now(), "Salary", TransactionType.INCOME, testUser, null));
+        transactionRepository.save(new Transaction(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
+                TransactionType.EXPENSE, testUser, null));
+        transactionRepository.save(new Transaction(new BigDecimal("500.00"), LocalDate.now(), "Salary",
+                TransactionType.INCOME, testUser, null));
 
         List<TransactionResponse> response = transactionService.getTransactions(testUser);
 
@@ -62,7 +61,8 @@ public class TransactionServiceTest {
     @Test
     void createTransaction() {
         AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries", TransactionType.EXPENSE, null);
+        TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
+                TransactionType.EXPENSE, null);
 
         TransactionResponse response = transactionService.createTransaction(request, testUser);
 
@@ -75,8 +75,10 @@ public class TransactionServiceTest {
     @Test
     void updateTransaction() {
         AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"), LocalDate.now(), "Old description", TransactionType.EXPENSE, testUser, null));
-        TransactionRequest request = new TransactionRequest(new BigDecimal("25.00"), LocalDate.now(), "Updated description", TransactionType.INCOME, null);
+        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
+                LocalDate.now(), "Old description", TransactionType.EXPENSE, testUser, null));
+        TransactionRequest request = new TransactionRequest(new BigDecimal("25.00"), LocalDate.now(),
+                "Updated description", TransactionType.INCOME, null);
 
         TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request);
 
@@ -89,8 +91,10 @@ public class TransactionServiceTest {
     void updateTransactionWithCategory() {
         AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
         Category savedCategory = categoryRepository.save(new Category("Food", testUser, null));
-        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"), LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
-        TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries", TransactionType.EXPENSE, savedCategory.getId());
+        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
+                LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
+        TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
+                TransactionType.EXPENSE, savedCategory.getId());
 
         TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request);
 
@@ -101,8 +105,10 @@ public class TransactionServiceTest {
     void updateTransactionRemovesCategory() {
         AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
         Category savedCategory = categoryRepository.save(new Category("Food", testUser, null));
-        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"), LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, savedCategory));
-        TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries", TransactionType.EXPENSE, null);
+        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
+                LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, savedCategory));
+        TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
+                TransactionType.EXPENSE, null);
 
         TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request);
 
@@ -112,7 +118,8 @@ public class TransactionServiceTest {
     @Test
     void deleteTransaction() {
         AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"), LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
+        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
+                LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
 
         transactionService.deleteTransaction(savedTransaction.getId());
 

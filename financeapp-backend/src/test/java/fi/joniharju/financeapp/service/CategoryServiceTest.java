@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 import fi.joniharju.financeapp.dto.CategoryRequest;
@@ -22,6 +22,7 @@ import fi.joniharju.financeapp.repository.CategoryRepository;
 
 @DataJpaTest
 @ActiveProfiles("test")
+@Import(CategoryService.class)
 public class CategoryServiceTest {
 
     @Autowired
@@ -30,12 +31,8 @@ public class CategoryServiceTest {
     @Autowired
     private AppUserRepository appUserRepository;
 
+    @Autowired
     private CategoryService categoryService;
-
-    @BeforeEach
-    void setUp() {
-        categoryService = new CategoryService(categoryRepository);
-    }
 
     @Test
     void getCategories() {

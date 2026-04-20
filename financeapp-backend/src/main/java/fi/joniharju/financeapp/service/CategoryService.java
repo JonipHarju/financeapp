@@ -3,6 +3,7 @@ package fi.joniharju.financeapp.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fi.joniharju.financeapp.dto.CategoryRequest;
@@ -15,11 +16,8 @@ import fi.joniharju.financeapp.repository.CategoryRepository;
 @Service
 public class CategoryService {
 
-    private final CategoryRepository categoryRepository;
-
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public List<CategoryResponse> getCategories(AppUser user) {
         return categoryRepository.findAllByUser(user).stream().map(DtoMapper::toCategoryResponse)
