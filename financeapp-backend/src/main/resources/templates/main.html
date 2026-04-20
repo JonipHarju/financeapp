@@ -3,49 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <title>Finance App</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-    <h1>Transactions</h1>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col">
 
-    <nav>
-        <a th:href="@{/dashboard}">Transactions</a> |
-        <a th:href="@{/categories}">Categories</a> |
-        <form th:action="@{/auth/logout}" method="post" style="display:inline">
-            <button type="submit">Logout</button>
-        </form>
+    <nav class="border-b border-gray-800 px-6 py-3 flex items-center justify-between">
+        <span class="text-lg font-semibold tracking-tight text-white">Finance<span class="text-emerald-400">App</span></span>
+        <div class="flex items-center gap-1">
+            <a th:href="@{/dashboard}" class="px-3 py-1.5 text-sm text-white bg-gray-800 rounded-md font-medium">Transactions</a>
+            <a th:href="@{/categories}" class="px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-md transition-colors">Categories</a>
+            <form th:action="@{/auth/logout}" method="post" style="display:inline" class="ml-2">
+                <button type="submit" class="px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-md transition-colors cursor-pointer">Logout</button>
+            </form>
+        </div>
     </nav>
 
-    <a th:href="@{/transactions/new}">+ New Transaction</a>
+    <main class="flex-1 px-6 py-8 max-w-5xl mx-auto w-full">
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 shadow-xl">
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Balance</p>
+                <p th:text="${balance}" class="text-2xl font-bold text-white tabular-nums"></p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 shadow-xl">
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Income</p>
+                <p th:text="${totalIncome}" class="text-2xl font-bold text-emerald-400 tabular-nums"></p>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 shadow-xl">
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Total Expenses</p>
+                <p th:text="${totalExpenses}" class="text-2xl font-bold text-red-400 tabular-nums"></p>
+            </div>
+        </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:if="${#lists.isEmpty(transactions)}">
-                <td colspan="6">No transactions yet.</td>
-            </tr>
-            <tr th:each="tx : ${transactions}">
-                <td th:text="${tx.date}"></td>
-                <td th:text="${tx.description}"></td>
-                <td th:text="${tx.categoryName} ?: '-'"></td>
-                <td th:text="${tx.type}"></td>
-                <td th:text="${tx.amount}"></td>
-                <td>
-                    <a th:href="@{/transactions/{id}/edit(id=${tx.id})}">Edit</a>
-                    <form th:action="@{/transactions/{id}/delete(id=${tx.id})}" method="post" style="display:inline">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl font-bold text-white tracking-tight">Transactions</h1>
+            <a th:href="@{/transactions/new}"
+               class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-emerald-500/20">
+                + New Transaction
+            </a>
+        </div>
+
+        <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-xl">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-800 text-xs text-gray-500 uppercase tracking-wider">
+                        <th class="text-left px-5 py-3 font-medium">Date</th>
+                        <th class="text-left px-5 py-3 font-medium">Description</th>
+                        <th class="text-left px-5 py-3 font-medium">Category</th>
+                        <th class="text-left px-5 py-3 font-medium">Type</th>
+                        <th class="text-right px-5 py-3 font-medium">Amount</th>
+                        <th class="text-right px-5 py-3 font-medium">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-800/60">
+                    <tr th:if="${#lists.isEmpty(transactions)}">
+                        <td colspan="6" class="px-5 py-12 text-center text-gray-500">No transactions yet.</td>
+                    </tr>
+                    <tr th:each="tx : ${transactions}" class="hover:bg-gray-800/40 transition-colors">
+                        <td th:text="${tx.date}" class="px-5 py-3.5 text-gray-400 tabular-nums whitespace-nowrap"></td>
+                        <td th:text="${tx.description}" class="px-5 py-3.5 text-gray-200"></td>
+                        <td th:text="${tx.categoryName} ?: '-'" class="px-5 py-3.5 text-gray-400"></td>
+                        <td class="px-5 py-3.5">
+                            <span th:text="${tx.type}"
+                                  th:class="${tx.type.name() == 'INCOME'} ? 'inline-flex px-2 py-0.5 rounded-full text-xs font-medium border bg-emerald-500/15 text-emerald-400 border-emerald-500/20' : 'inline-flex px-2 py-0.5 rounded-full text-xs font-medium border bg-red-500/15 text-red-400 border-red-500/20'">
+                            </span>
+                        </td>
+                        <td th:text="${tx.amount}"
+                            th:class="${tx.type.name() == 'INCOME'} ? 'px-5 py-3.5 text-right tabular-nums font-medium text-emerald-400' : 'px-5 py-3.5 text-right tabular-nums font-medium text-red-400'"></td>
+                        <td class="px-5 py-3.5 text-right whitespace-nowrap">
+                            <a th:href="@{/transactions/{id}/edit(id=${tx.id})}"
+                               class="text-xs text-gray-400 hover:text-white transition-colors mr-3">Edit</a>
+                            <form th:action="@{/transactions/{id}/delete(id=${tx.id})}" method="post" style="display:inline">
+                                <button type="submit" class="text-xs text-red-500/70 hover:text-red-400 transition-colors cursor-pointer">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
 </body>
 </html>

@@ -3,27 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-    <h1>Register</h1>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col items-center justify-center px-4">
 
-    <div th:if="${error}">
-        <p th:text="${error}"></p>
+    <div class="w-full max-w-sm">
+        <div class="text-center mb-8">
+            <a href="/" class="text-2xl font-semibold tracking-tight text-white">Finance<span class="text-emerald-400">App</span></a>
+            <p class="text-gray-500 text-sm mt-1">Create your account</p>
+        </div>
+
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-8 shadow-xl">
+
+            <div th:if="${error}" class="mb-5 flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-lg px-4 py-3">
+                <p th:text="${error}"></p>
+            </div>
+
+            <form th:action="@{/auth/register}" th:object="${registerRequest}" method="post" class="space-y-5">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1.5">Username</label>
+                    <input type="text" th:field="*{username}"
+                           class="w-full bg-gray-800 border border-gray-700 text-gray-100 rounded-lg px-3 py-2.5 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                           placeholder="your username" />
+                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                          class="block mt-1.5 text-xs text-red-400"></span>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1.5">Email</label>
+                    <input type="email" th:field="*{email}"
+                           class="w-full bg-gray-800 border border-gray-700 text-gray-100 rounded-lg px-3 py-2.5 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                           placeholder="you@example.com" />
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                          class="block mt-1.5 text-xs text-red-400"></span>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
+                    <input type="password" th:field="*{password}"
+                           class="w-full bg-gray-800 border border-gray-700 text-gray-100 rounded-lg px-3 py-2.5 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                           placeholder="••••••••" />
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                          class="block mt-1.5 text-xs text-red-400"></span>
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-emerald-500 hover:bg-emerald-400 text-white rounded-lg py-2.5 text-sm font-medium transition-colors shadow-lg shadow-emerald-500/20 mt-2">
+                    Create account
+                </button>
+            </form>
+        </div>
+
+        <p class="text-center text-sm text-gray-500 mt-6">
+            Already have an account?
+            <a th:href="@{/auth/login}" class="text-emerald-400 hover:text-emerald-300 font-medium transition-colors">Sign in</a>
+        </p>
     </div>
 
-    <form th:action="@{/auth/register}" th:object="${registerRequest}" method="post">
-        <label>Username: <input type="text" th:field="*{username}" /></label>
-        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span><br/>
-
-        <label>Email: <input type="email" th:field="*{email}" /></label>
-        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span><br/>
-
-        <label>Password: <input type="password" th:field="*{password}" /></label>
-        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span><br/>
-
-        <button type="submit">Register</button>
-    </form>
-
-    <p><a th:href="@{/auth/login}">Already have an account? Login</a></p>
 </body>
 </html>

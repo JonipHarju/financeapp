@@ -3,18 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Finance App</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-    <h1>Finance App</h1>
-    <p>A simple tool for tracking your personal finances.</p>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col">
 
-    <ul>
-        <li>Track income and expenses</li>
-        <li>Organize transactions by category</li>
-        <li>View your full transaction history</li>
-    </ul>
+    <header class="border-b border-gray-800 px-8 py-4 flex items-center justify-between">
+        <span class="text-xl font-semibold tracking-tight text-white">Finance<span class="text-emerald-400">App</span></span>
+        <div class="flex gap-3">
+            <a th:href="@{/auth/login}" class="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors">Login</a>
+            <a th:href="@{/auth/register}" class="px-4 py-2 text-sm bg-emerald-500 hover:bg-emerald-400 text-white rounded-lg font-medium transition-colors">Get started</a>
+        </div>
+    </header>
 
-    <a th:href="@{/auth/login}">Login</a> |
-    <a th:href="@{/auth/register}">Register</a>
+    <main class="flex-1 flex flex-col items-center justify-center px-6 text-center">
+        <div class="max-w-2xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium mb-8">
+                Personal finance, simplified
+            </div>
+            <h1 class="text-5xl font-bold tracking-tight text-white mb-6 leading-tight">
+                Track every dollar.<br/>
+                <span class="text-emerald-400">Stay in control.</span>
+            </h1>
+            <p class="text-lg text-gray-400 mb-10 leading-relaxed">
+                A simple tool for tracking your personal finances. Know where your money goes.
+            </p>
+
+            <ul class="flex flex-col sm:flex-row gap-4 justify-center mb-12 text-sm text-gray-400">
+                <li class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</span>
+                    Track income and expenses
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</span>
+                    Organize by category
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</span>
+                    View full transaction history
+                </li>
+            </ul>
+
+            <div class="flex gap-4 justify-center">
+                <a th:href="@{/auth/register}" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-white rounded-lg font-medium transition-colors shadow-lg shadow-emerald-500/20">
+                    Create free account
+                </a>
+                <a th:href="@{/auth/login}" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg font-medium transition-colors border border-gray-700">
+                    Sign in
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-800 px-8 py-4 text-center text-xs text-gray-600">
+        &copy; 2026 FinanceApp
+    </footer>
+
 </body>
 </html>

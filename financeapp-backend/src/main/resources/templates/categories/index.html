@@ -3,36 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Categories</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-    <h1>Categories</h1>
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col">
 
-    <nav>
-        <a th:href="@{/dashboard}">Transactions</a> |
-        <a th:href="@{/categories}">Categories</a> |
-        <form th:action="@{/auth/logout}" method="post" style="display:inline">
-            <button type="submit">Logout</button>
-        </form>
+    <nav class="border-b border-gray-800 px-6 py-3 flex items-center justify-between">
+        <span class="text-lg font-semibold tracking-tight text-white">Finance<span class="text-emerald-400">App</span></span>
+        <div class="flex items-center gap-1">
+            <a th:href="@{/dashboard}" class="px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-md transition-colors">Transactions</a>
+            <a th:href="@{/categories}" class="px-3 py-1.5 text-sm text-white bg-gray-800 rounded-md font-medium">Categories</a>
+            <form th:action="@{/auth/logout}" method="post" style="display:inline" class="ml-2">
+                <button type="submit" class="px-3 py-1.5 text-sm text-gray-400 hover:text-white hover:bg-gray-800 rounded-md transition-colors cursor-pointer">Logout</button>
+            </form>
+        </div>
     </nav>
 
-    <h2>New Category</h2>
-    <form th:action="@{/categories/new}" th:object="${categoryRequest}" method="post">
-        <label>Name:
-            <input type="text" th:field="*{name}" />
-        </label>
-        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-        <button type="submit">Add</button>
-    </form>
+    <main class="flex-1 px-6 py-8 max-w-2xl mx-auto w-full">
+        <h1 class="text-2xl font-bold text-white tracking-tight mb-8">Categories</h1>
 
-    <h2>Your Categories</h2>
-    <ul>
-        <li th:if="${#lists.isEmpty(categories)}">No categories yet.</li>
-        <li th:each="cat : ${categories}">
-            <span th:text="${cat.name}"></span>
-            <form th:action="@{/categories/{id}/delete(id=${cat.id})}" method="post" style="display:inline">
-                <button type="submit">Delete</button>
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-xl mb-6">
+            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">New Category</h2>
+            <form th:action="@{/categories/new}" th:object="${categoryRequest}" method="post" class="flex items-start gap-3">
+                <div class="flex-1">
+                    <input type="text" th:field="*{name}"
+                           class="w-full bg-gray-800 border border-gray-700 text-gray-100 rounded-lg px-3 py-2.5 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                           placeholder="e.g. Groceries" />
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                          class="block mt-1.5 text-xs text-red-400"></span>
+                </div>
+                <button type="submit"
+                        class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-emerald-500/20 whitespace-nowrap">
+                    Add
+                </button>
             </form>
-        </li>
-    </ul>
+        </div>
+
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-xl">
+            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Your Categories</h2>
+            <ul class="space-y-2">
+                <li th:if="${#lists.isEmpty(categories)}" class="text-gray-500 text-sm py-4 text-center">No categories yet.</li>
+                <li th:each="cat : ${categories}" class="flex items-center justify-between px-3 py-2 bg-gray-800/50 rounded-lg border border-gray-800 group">
+                    <span th:text="${cat.name}" class="text-sm text-gray-200 font-medium"></span>
+                    <form th:action="@{/categories/{id}/delete(id=${cat.id})}" method="post" style="display:inline">
+                        <button type="submit" class="text-xs text-red-500/60 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer">Delete</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </main>
+
 </body>
 </html>
