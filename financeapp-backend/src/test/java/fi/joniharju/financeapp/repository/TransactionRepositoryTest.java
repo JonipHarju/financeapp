@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -80,6 +81,39 @@ public class TransactionRepositoryTest {
         assertEquals(new BigDecimal("25.75"), foundTransaction.get().getAmount());
         assertEquals("Updated transaction", foundTransaction.get().getDescription());
         assertEquals(TransactionType.INCOME, foundTransaction.get().getType());
+    }
+
+    @Test
+    void testFindAllByUser() {
+        AppUser testUser = new AppUser("Joni Harju", "test123", "joni@email.com");
+        AppUser savedUser = AppUserRepository.save(testUser);
+
+        TransactionRepository.save(new Transaction(
+                new BigDecimal("10.00"), LocalDate.now(), "Groceries", TransactionType.EXPENSE, savedUser, null));
+        TransactionRepository.save(new Transaction(
+                new BigDecimal("500.00"), LocalDate.now(), "Salary", TransactionType.INCOME, savedUser, null));
+
+        List<Transaction> transactions = TransactionRepository.findAllByUser(savedUser);
+
+        assertEquals(2, transactions.size());
+        assertTrue(transactions.stream().anyMatch(t -> t.getDescription().equals("Groceries")));
+        assertTrue(transactions.stream().anyMatch(t -> t.getDescription().equals("Salary")));
+    }
+
+    @Test
+    void testFindAllByUserOnlyReturnsOwnTransactions() {
+        AppUser user1 = AppUserRepository.save(new AppUser("User One", "pass1", "one@email.com"));
+        AppUser user2 = AppUserRepository.save(new AppUser("User Two", "pass2", "two@email.com"));
+
+        TransactionRepository.save(new Transaction(
+                new BigDecimal("100.00"), LocalDate.now(), "User1 expense", TransactionType.EXPENSE, user1, null));
+        TransactionRepository.save(new Transaction(
+                new BigDecimal("200.00"), LocalDate.now(), "User2 expense", TransactionType.EXPENSE, user2, null));
+
+        List<Transaction> user1Transactions = TransactionRepository.findAllByUser(user1);
+
+        assertEquals(1, user1Transactions.size());
+        assertEquals("User1 expense", user1Transactions.get(0).getDescription());
     }
 
 }

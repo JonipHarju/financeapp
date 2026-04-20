@@ -64,4 +64,21 @@ public class AppUserRepositoryTest {
         assertEquals("joni.updated@email.com", updatedUser.get().getEmail());
 
     }
+
+    @Test
+    void testFindByUsername() {
+        AppUser testUser = new AppUser("Joni Harju", "test123", "joni@email.com");
+        AppuserRepository.save(testUser);
+
+        Optional<AppUser> foundUser = AppuserRepository.findByUsername("Joni Harju");
+
+        assertTrue(foundUser.isPresent());
+        assertEquals("joni@email.com", foundUser.get().getEmail());
+    }
+
+    @Test
+    void testFindByUsernameNotFound() {
+        Optional<AppUser> foundUser = AppuserRepository.findByUsername("nonexistent");
+        assertFalse(foundUser.isPresent());
+    }
 }

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -73,6 +74,35 @@ public class CategoryRepositoryTest {
         assertEquals("Updated User", updatedCategory.get().getUser().getUsername());
         assertEquals("updatedCategory", updatedCategory.get().getName());
 
+    }
+
+    @Test
+    void testFindAllByUser() {
+        AppUser testUser = new AppUser("Joni Harju", "test123", "joni@email.com");
+        AppUser savedUser = AppuserRepository.save(testUser);
+
+        CategoryRepository.save(new Category("Food", savedUser, null));
+        CategoryRepository.save(new Category("Transport", savedUser, null));
+
+        List<Category> categories = CategoryRepository.findAllByUser(savedUser);
+
+        assertEquals(2, categories.size());
+        assertTrue(categories.stream().anyMatch(c -> c.getName().equals("Food")));
+        assertTrue(categories.stream().anyMatch(c -> c.getName().equals("Transport")));
+    }
+
+    @Test
+    void testFindAllByUserOnlyReturnsOwnCategories() {
+        AppUser user1 = AppuserRepository.save(new AppUser("User One", "pass1", "one@email.com"));
+        AppUser user2 = AppuserRepository.save(new AppUser("User Two", "pass2", "two@email.com"));
+
+        CategoryRepository.save(new Category("Food", user1, null));
+        CategoryRepository.save(new Category("Travel", user2, null));
+
+        List<Category> user1Categories = CategoryRepository.findAllByUser(user1);
+
+        assertEquals(1, user1Categories.size());
+        assertEquals("Food", user1Categories.get(0).getName());
     }
 
 }
