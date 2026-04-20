@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,100 +33,116 @@ import fi.joniharju.financeapp.repository.TransactionRepository;
 @Import({ TransactionService.class, PasswordEncoderConfig.class })
 public class TransactionServiceTest {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+        @Autowired
+        private TransactionRepository transactionRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+        @Autowired
+        private CategoryRepository categoryRepository;
 
-    @Autowired
-    private AppUserRepository appUserRepository;
+        @Autowired
+        private AppUserRepository appUserRepository;
 
-    @Autowired
-    private TransactionService transactionService;
+        @Autowired
+        private TransactionService transactionService;
 
-    @Test
-    void getTransactions() {
-        AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        transactionRepository.save(new Transaction(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
-                TransactionType.EXPENSE, testUser, null));
-        transactionRepository.save(new Transaction(new BigDecimal("500.00"), LocalDate.now(), "Salary",
-                TransactionType.INCOME, testUser, null));
+        @Test
+        void getTransactions() {
+                AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
+                transactionRepository.save(new Transaction(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
+                                TransactionType.EXPENSE, testUser, null));
+                transactionRepository.save(new Transaction(new BigDecimal("500.00"), LocalDate.now(), "Salary",
+                                TransactionType.INCOME, testUser, null));
 
-        List<TransactionResponse> response = transactionService.getTransactions(testUser);
+                List<TransactionResponse> response = transactionService.getTransactions(testUser);
 
-        assertEquals(2, response.size());
-        assertEquals("Groceries", response.get(0).getDescription());
-        assertEquals("Salary", response.get(1).getDescription());
-    }
+                assertEquals(2, response.size());
+                assertEquals("Groceries", response.get(0).getDescription());
+                assertEquals("Salary", response.get(1).getDescription());
+        }
 
-    @Test
-    void createTransaction() {
-        AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
-                TransactionType.EXPENSE, null);
+        @Test
+        void createTransaction() {
+                AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
+                TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(),
+                                "Groceries",
+                                TransactionType.EXPENSE, null);
 
-        TransactionResponse response = transactionService.createTransaction(request, testUser);
+                TransactionResponse response = transactionService.createTransaction(request, testUser);
 
-        assertNotNull(response.getId());
-        assertEquals("Groceries", response.getDescription());
-        assertEquals(TransactionType.EXPENSE, response.getType());
-        assertEquals(new BigDecimal("10.00"), response.getAmount());
-    }
+                assertNotNull(response.getId());
+                assertEquals("Groceries", response.getDescription());
+                assertEquals(TransactionType.EXPENSE, response.getType());
+                assertEquals(new BigDecimal("10.00"), response.getAmount());
+        }
 
-    @Test
-    void updateTransaction() {
-        AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
-                LocalDate.now(), "Old description", TransactionType.EXPENSE, testUser, null));
-        TransactionRequest request = new TransactionRequest(new BigDecimal("25.00"), LocalDate.now(),
-                "Updated description", TransactionType.INCOME, null);
+        @Test
+        void updateTransaction() {
+                AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
+                Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
+                                LocalDate.now(), "Old description", TransactionType.EXPENSE, testUser, null));
+                TransactionRequest request = new TransactionRequest(new BigDecimal("25.00"), LocalDate.now(),
+                                "Updated description", TransactionType.INCOME, null);
 
-        TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request, testUser);
+                TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request,
+                                testUser);
 
-        assertEquals("Updated description", response.getDescription());
-        assertEquals(TransactionType.INCOME, response.getType());
-        assertEquals(new BigDecimal("25.00"), response.getAmount());
-    }
+                assertEquals("Updated description", response.getDescription());
+                assertEquals(TransactionType.INCOME, response.getType());
+                assertEquals(new BigDecimal("25.00"), response.getAmount());
+        }
 
-    @Test
-    void updateTransactionWithCategory() {
-        AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        Category savedCategory = categoryRepository.save(new Category("Food", testUser, null));
-        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
-                LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
-        TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
-                TransactionType.EXPENSE, savedCategory.getId());
+        @Test
+        void updateTransactionWithCategory() {
+                AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
+                Category savedCategory = categoryRepository.save(new Category("Food", testUser, null));
+                Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
+                                LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
+                TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(),
+                                "Groceries",
+                                TransactionType.EXPENSE, savedCategory.getId());
 
-        TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request, testUser);
+                TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request,
+                                testUser);
 
-        assertEquals("Food", response.getCategoryName());
-    }
+                assertEquals("Food", response.getCategoryName());
+        }
 
-    @Test
-    void updateTransactionRemovesCategory() {
-        AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        Category savedCategory = categoryRepository.save(new Category("Food", testUser, null));
-        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
-                LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, savedCategory));
-        TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(), "Groceries",
-                TransactionType.EXPENSE, null);
+        @Test
+        void updateTransactionRemovesCategory() {
+                AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
+                Category savedCategory = categoryRepository.save(new Category("Food", testUser, null));
+                Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
+                                LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, savedCategory));
+                TransactionRequest request = new TransactionRequest(new BigDecimal("10.00"), LocalDate.now(),
+                                "Groceries",
+                                TransactionType.EXPENSE, null);
 
-        TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request, testUser);
+                TransactionResponse response = transactionService.updateTransaction(savedTransaction.getId(), request,
+                                testUser);
 
-        assertNull(response.getCategoryName());
-    }
+                assertNull(response.getCategoryName());
+        }
 
-    @Test
-    void deleteTransaction() {
-        AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
-        Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
-                LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
+        @Test
+        void deleteTransaction() {
+                AppUser testUser = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
+                Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
+                                LocalDate.now(), "Groceries", TransactionType.EXPENSE, testUser, null));
 
-        transactionService.deleteTransaction(savedTransaction.getId(), testUser);
+                transactionService.deleteTransaction(savedTransaction.getId(), testUser);
 
-        Optional<Transaction> deletedTransaction = transactionRepository.findById(savedTransaction.getId());
-        assertFalse(deletedTransaction.isPresent());
-    }
+                Optional<Transaction> deletedTransaction = transactionRepository.findById(savedTransaction.getId());
+                assertFalse(deletedTransaction.isPresent());
+        }
+
+        void deleteTransactionByWrongUserThrows() {
+                AppUser owner = appUserRepository.save(new AppUser("Joni Harju", "test123", "joni@email.com"));
+                AppUser otherUser = appUserRepository.save(new AppUser("Other User", "test123", "other@email.com"));
+                Transaction savedTransaction = transactionRepository.save(new Transaction(new BigDecimal("10.00"),
+                                LocalDate.now(), "Groceries", TransactionType.EXPENSE, owner, null));
+
+                assertThrows(RuntimeException.class,
+                                () -> transactionService.deleteTransaction(savedTransaction.getId(), otherUser));
+        }
 
 }
