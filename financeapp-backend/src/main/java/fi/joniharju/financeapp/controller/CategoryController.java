@@ -1,52 +1,50 @@
 package fi.joniharju.financeapp.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 import fi.joniharju.financeapp.dto.CategoryRequest;
-import fi.joniharju.financeapp.dto.CategoryResponse;
 import fi.joniharju.financeapp.entity.AppUser;
 import fi.joniharju.financeapp.service.CategoryService;
 
-@RestController
-@RequestMapping("/api/categories")
+@Controller
+@RequestMapping("/categories")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getCategories(@AuthenticationPrincipal AppUser user) {
-        return ResponseEntity.ok(categoryService.getCategories(user));
+    public String categoriesPage(Model model, @AuthenticationPrincipal AppUser user) {
+        model.addAttribute("categories", categoryService.getCategories(user));
+        model.addAttribute("categoryRequest", new CategoryRequest());
+        return "categories/index";
     }
 
-    @PostMapping
-    public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest req, @AuthenticationPrincipal AppUser user) {
-        return ResponseEntity.ok(categoryService.createCategory(req, user));
+    @PostMapping("/new")
+    public String createCategory(@Valid @ModelAttribute CategoryRequest categoryRequest,
+            BindingResult bindingResult, Model model, @AuthenticationPrincipal AppUser user) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.getCategories(user));
+            return "categories/index";
+        }
+        categoryService.createCategory(categoryRequest, user);
+        return "redirect:/categories";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id,
-            @Valid @RequestBody CategoryRequest req, @AuthenticationPrincipal AppUser user) {
-        return ResponseEntity.ok(categoryService.updateCategory(id, req, user));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id, @AuthenticationPrincipal AppUser user) {
+    @PostMapping("/{id}/delete")
+    public String deleteCategory(@PathVariable Long id, @AuthenticationPrincipal AppUser user) {
         categoryService.deleteCategory(id, user);
-        return ResponseEntity.noContent().build();
+        return "redirect:/categories";
     }
 
 }

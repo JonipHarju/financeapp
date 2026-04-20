@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+</head>
+<body>
+    <h1>Categories</h1>
+
+    <nav>
+        <a th:href="@{/dashboard}">Transactions</a> |
+        <a th:href="@{/categories}">Categories</a> |
+        <form th:action="@{/auth/logout}" method="post" style="display:inline">
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
+
+    <h2>New Category</h2>
+    <form th:action="@{/categories/new}" th:object="${categoryRequest}" method="post">
+        <label>Name:
+            <input type="text" th:field="*{name}" />
+        </label>
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        <button type="submit">Add</button>
+    </form>
+
+    <h2>Your Categories</h2>
+    <ul>
+        <li th:if="${#lists.isEmpty(categories)}">No categories yet.</li>
+        <li th:each="cat : ${categories}">
+            <span th:text="${cat.name}"></span>
+            <form th:action="@{/categories/{id}/delete(id=${cat.id})}" method="post" style="display:inline">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    </ul>
+</body>
+</html>

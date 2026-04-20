@@ -63,6 +63,19 @@ public class TransactionService {
         return DtoMapper.toTransactionResponse(transactionRepository.save(transaction));
     }
 
+    // Fetches an existing transaction and maps it to a TransactionRequest so the
+    // edit form can be pre filled
+    public TransactionRequest getTransactionRequest(Long id, AppUser user) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+        if (!transaction.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Access denied");
+        }
+        Long categoryId = transaction.getCategory() != null ? transaction.getCategory().getId() : null;
+        return new TransactionRequest(transaction.getAmount(), transaction.getDate(),
+                transaction.getDescription(), transaction.getType(), categoryId);
+    }
+
     public void deleteTransaction(Long id, AppUser user) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));

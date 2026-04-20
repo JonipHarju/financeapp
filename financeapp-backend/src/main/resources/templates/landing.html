@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Finance App</title>
+</head>
+<body>
+    <h1>Finance App</h1>
+    <p>A simple tool for tracking your personal finances.</p>
+
+    <ul>
+        <li>Track income and expenses</li>
+        <li>Organize transactions by category</li>
+        <li>View your full transaction history</li>
+    </ul>
+
+    <a th:href="@{/auth/login}">Login</a> |
+    <a th:href="@{/auth/register}">Register</a>
+</body>
+</html>
