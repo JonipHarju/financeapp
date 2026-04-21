@@ -10,14 +10,19 @@ import fi.joniharju.financeapp.dto.CategoryRequest;
 import fi.joniharju.financeapp.dto.CategoryResponse;
 import fi.joniharju.financeapp.entity.AppUser;
 import fi.joniharju.financeapp.entity.Category;
+import fi.joniharju.financeapp.entity.Transaction;
 import fi.joniharju.financeapp.mapper.DtoMapper;
 import fi.joniharju.financeapp.repository.CategoryRepository;
+import fi.joniharju.financeapp.repository.TransactionRepository;
 
 @Service
 public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public List<CategoryResponse> getCategories(AppUser user) {
         return categoryRepository.findAllByUser(user).stream().map(DtoMapper::toCategoryResponse)
@@ -46,6 +51,9 @@ public class CategoryService {
         if (!category.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("Access denied");
         }
+        List<Transaction> linked = transactionRepository.findAllByCategory(category);
+        linked.forEach(t -> t.setCategory(null));
+        transactionRepository.saveAll(linked);
         categoryRepository.deleteById(id);
     }
 }
